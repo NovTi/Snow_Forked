@@ -122,7 +122,7 @@ def retweet(request):
 #implement unretweet
 
 @require_auth
-@post("unretweet")
+@post("undo_retweet")
 @contract(Schema({'id': int}))
 def unretweet(request):
     id = request.payload['id']
