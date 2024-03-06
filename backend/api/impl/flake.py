@@ -104,3 +104,30 @@ def comments(request):
     offset = request.payload['offset']
     limit = request.payload['limit']
     return success(list(flake.comments.all()[offset:offset+limit]))
+
+
+# implement retweet
+
+@require_auth
+@post("retweet")
+@contract(Schema({'id': int}))
+def retweet(request):
+    id = request.payload['id']
+    flake = service.flake.get(id)
+    if flake is None:
+        return client_error('INVALID_PARAM', f"No such flake: {id}")
+    request.user.retweet(flake)
+    return success(flake)
+
+#implement unretweet
+
+@require_auth
+@post("unretweet")
+@contract(Schema({'id': int}))
+def unretweet(request):
+    id = request.payload['id']
+    flake = service.flake.get(id)
+    if flake is None:
+        return client_error('INVALID_PARAM', f"No such flake: {id}")
+    request.user.unretweet(flake)
+    return success(flake)
